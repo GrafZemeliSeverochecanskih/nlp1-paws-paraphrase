@@ -1,0 +1,35 @@
+{
+  "train": {
+    "pairs": 49401,
+    "paraphrase_share": 0.4418736462824639,
+    "distinct_sentences": 40223,
+    "pairs_sharing_a_sentence": 0.995040586222951,
+    "mean_words_per_sentence": 21.33936559988664,
+    "different_mean_word_overlap": 0.8466387928032566,
+    "different_same_word_set_share": 0.110147976207747,
+    "paraphrase_mean_word_overlap": 0.8436991601003057,
+    "paraphrase_same_word_set_share": 0.07027348939484172
+  },
+  "validation": {
+    "pairs": 8000,
+    "paraphrase_share": 0.442375,
+    "distinct_sentences": 6476,
+    "pairs_sharing_a_sentence": 0.994875,
+    "mean_words_per_sentence": 21.375,
+    "different_mean_word_overlap": 0.8480317177963174,
+    "different_same_word_set_share": 0.11297915265635508,
+    "paraphrase_mean_word_overlap": 0.8459761232558837,
+    "paraphrase_same_word_set_share": 0.07205425261373269
+  },
+  "test": {
+    "pairs": 8000,
+    "paraphrase_share": 0.442,
+    "distinct_sentences": 6431,
+    "pairs_sharing_a_sentence": 0.995125,
+    "mean_words_per_sentence": 21.416625,
+    "different_mean_word_overlap": 0.8499121838842661,
+    "different_same_word_set_share": 0.11917562724014337,
+    "paraphrase_mean_word_overlap": 0.8450057153845064,
+    "paraphrase_same_word_set_share": 0.0752262443438914
+  }
+}

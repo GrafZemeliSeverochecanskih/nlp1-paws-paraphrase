@@ -1,0 +1,42 @@
+{
+  "name": "indicator+mlp",
+  "config": {
+    "root": "D:\\University\\MSc\\Natural Language Processing 1\\Project\\nlp1-paws",
+    "data_dir": "D:\\University\\MSc\\Natural Language Processing 1\\Project\\nlp1-paws\\data",
+    "results_dir": "D:\\University\\MSc\\Natural Language Processing 1\\Project\\nlp1-paws\\results\\p1_full",
+    "tokenizer_path": "D:\\University\\MSc\\Natural Language Processing 1\\Project\\nlp1-paws\\results\\p1\\tokenizer.json",
+    "dataset_name": "google-research-datasets/paws",
+    "dataset_config": "labeled_final",
+    "subsample_size": 20000,
+    "seeds": [
+      0
+    ],
+    "k": 5,
+    "vocab_size": 1000,
+    "min_frequency": 2,
+    "max_bigrams": 5000,
+    "loglin_max_iter": 10000,
+    "hidden_dim": 128,
+    "dropout": 0.1,
+    "batch_size": 64,
+    "learning_rate": 0.001,
+    "weight_decay": 0.0001,
+    "num_epochs": 20,
+    "device": "cpu",
+    "rope": 0.01
+  },
+  "accuracies": [
+    0.56175,
+    0.5535,
+    0.576,
+    0.55875,
+    0.57925
+  ],
+  "f1": [
+    0.15761653051417587,
+    0.31148804934464147,
+    0.11758584807492195,
+    0.09810935104752172,
+    0.208
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "name": "bow+mlp2",
+  "config": {
+    "root": "D:\\University\\MSc\\Natural Language Processing 1\\Project\\nlp1-paws",
+    "data_dir": "D:\\University\\MSc\\Natural Language Processing 1\\Project\\nlp1-paws\\data",
+    "results_dir": "D:\\University\\MSc\\Natural Language Processing 1\\Project\\nlp1-paws\\results\\p1_full",
+    "tokenizer_path": "D:\\University\\MSc\\Natural Language Processing 1\\Project\\nlp1-paws\\results\\p1\\tokenizer.json",
+    "dataset_name": "google-research-datasets/paws",
+    "dataset_config": "labeled_final",
+    "subsample_size": 20000,
+    "seeds": [
+      0
+    ],
+    "k": 5,
+    "vocab_size": 1000,
+    "min_frequency": 2,
+    "max_bigrams": 5000,
+    "loglin_max_iter": 10000,
+    "hidden_dim": 128,
+    "dropout": 0.1,
+    "batch_size": 64,
+    "learning_rate": 0.001,
+    "weight_decay": 0.0001,
+    "num_epochs": 20,
+    "device": "cpu",
+    "rope": 0.01
+  },
+  "accuracies": [
+    0.567,
+    0.563,
+    0.5755,
+    0.571,
+    0.57475
+  ],
+  "f1": [
+    0.17758784425451093,
+    0.16682554814108674,
+    0.2050561797752809,
+    0.2765598650927487,
+    0.08004326663061113
+  ]
+}

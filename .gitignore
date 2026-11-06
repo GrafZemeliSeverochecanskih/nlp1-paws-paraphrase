@@ -1,0 +1,22 @@
+__pycache__/
+*.pyc
+*.egg-info/
+.venv/
+.ipynb_checkpoints/
+data/*
+!data/.gitkeep
+results/*
+!results/.gitkeep
+!results/p1/
+results/p1/models/
+results/p1/*.log
+!results/p1_full/
+results/p1_full/models/
+results/p1_full/*.log
+external/*
+!external/.gitkeep
+*.pickle
+*.pt
+# editor config
+.vscode/
+.idea/

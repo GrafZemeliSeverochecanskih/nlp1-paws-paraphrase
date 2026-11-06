@@ -1,0 +1,17 @@
+# Same stack as the course (nlp-illc/nlp1-student/requirements.txt)
+jupyter==1.1.1
+numpy==2.5.4
+scipy==1.18.1
+matplotlib==3.11.2
+pandas==3.1.0
+seaborn==0.13.2
+nltk==3.10.4
+scikit-learn==1.9.1
+torch==2.15.0
+tokenizers==0.23.3
+datasets==5.1.0
+tabulate==0.10.0
+tqdm==4.70.1
+ipywidgets==8.1.9
+baycomp==1.0.3
+certifi==2026.10.23

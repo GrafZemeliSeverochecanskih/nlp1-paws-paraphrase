@@ -1,0 +1,42 @@
+{
+  "name": "bigram+mlp",
+  "config": {
+    "root": "D:\\University\\MSc\\Natural Language Processing 1\\Project\\nlp1-paws",
+    "data_dir": "D:\\University\\MSc\\Natural Language Processing 1\\Project\\nlp1-paws\\data",
+    "results_dir": "D:\\University\\MSc\\Natural Language Processing 1\\Project\\nlp1-paws\\results\\p1_full",
+    "tokenizer_path": "D:\\University\\MSc\\Natural Language Processing 1\\Project\\nlp1-paws\\results\\p1\\tokenizer.json",
+    "dataset_name": "google-research-datasets/paws",
+    "dataset_config": "labeled_final",
+    "subsample_size": 20000,
+    "seeds": [
+      0
+    ],
+    "k": 5,
+    "vocab_size": 1000,
+    "min_frequency": 2,
+    "max_bigrams": 5000,
+    "loglin_max_iter": 10000,
+    "hidden_dim": 128,
+    "dropout": 0.1,
+    "batch_size": 64,
+    "learning_rate": 0.001,
+    "weight_decay": 0.0001,
+    "num_epochs": 20,
+    "device": "cpu",
+    "rope": 0.01
+  },
+  "accuracies": [
+    0.617,
+    0.6175,
+    0.624,
+    0.62525,
+    0.60225
+  ],
+  "f1": [
+    0.5475487300649734,
+    0.5006527415143603,
+    0.5302935665209244,
+    0.5314160675211004,
+    0.4912056283978254
+  ]
+}

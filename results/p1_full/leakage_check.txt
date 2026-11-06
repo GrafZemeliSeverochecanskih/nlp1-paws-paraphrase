@@ -1,0 +1,17 @@
+Official validation pairs sharing a sentence with train: 0.000
+Official validation, bigram+loglin trained on random folds: 0.5971
+Official validation, bigram+loglin trained on grouped folds: 0.5988
+Official validation, bigram+mlp trained on random folds: 0.5987
+Official validation, bigram+mlp trained on grouped folds: 0.6114
+Official validation, bigram+mlp2 trained on random folds: 0.5953
+Official validation, bigram+mlp2 trained on grouped folds: 0.6115
+Random folds, validation pairs sharing a sentence with training: 0.712
+Grouped folds, validation pairs sharing a sentence with training: 0.000
+Random folds, bigram+loglin, no shared sentence: n=5755 accuracy=0.6024
+Random folds, bigram+loglin, training labels all agree: n=4053 accuracy=0.8732
+Random folds, bigram+loglin, training labels all disagree: n=6299 accuracy=0.3734
+Random folds, bigram+loglin, training labels mixed: n=3893 accuracy=0.6725
+Random folds, bigram+mlp, no shared sentence: n=5755 accuracy=0.5828
+Random folds, bigram+mlp, training labels all agree: n=4053 accuracy=0.8534
+Random folds, bigram+mlp, training labels all disagree: n=6299 accuracy=0.3348
+Random folds, bigram+mlp, training labels mixed: n=3893 accuracy=0.7298

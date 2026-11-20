@@ -13,6 +13,12 @@ results/p1/*.log
 !results/p1_full/
 results/p1_full/models/
 results/p1_full/*.log
+!results/p2/
+results/p2/models/
+results/p2/*.log
+!results/p2_*/
+results/p2_*/models/
+results/p2_*/*.log
 external/*
 !external/.gitkeep
 *.pickle

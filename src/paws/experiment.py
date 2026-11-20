@@ -1,4 +1,4 @@
-"""Run the five P1 systems (encoder x architecture) with k-fold CV and save results to disk."""
+"""Run the P1 systems (encoder x architecture) and the P2 neural systems with k-fold CV; save results to disk."""
 
 import json
 import random
@@ -8,12 +8,13 @@ import numpy as np
 import torch
 
 from paws import tokenization
-from paws.config import Config
+from paws.config import Config, P2Config
 from paws.data import OUTCOMES, load_pairs, train_sentences
 from paws.encoders import PairBagOfWords, PairBigram, PairEncoder, PairTokenIndicator
 from paws.evaluation import fold_f1, majority_scores
 from paws.models import TwoLayerSparseMLP
-from paws.tutorial import part1
+from paws.neural import encoder_patch
+from paws.tutorial import part1, part2
 
 
 def set_seed(seed: int) -> None:
@@ -30,7 +31,7 @@ def run_system(
     path = cfg.results_dir / "cv" / f"{name}.json"
     if path.exists():
         saved = json.loads(path.read_text())
-        if saved["config"] == cfg.to_dict():
+        if saved["config"] == json.loads(json.dumps(cfg.to_dict())):  # JSON round trip: saved seeds are a list
             return saved
 
     scores = {"name": name, "config": cfg.to_dict(), "accuracies": [], "f1": []}
@@ -79,3 +80,60 @@ def run_all(cfg: Config) -> None:
     print(f"Best representation with log-linear: {best}")
     run_system(f"{best}+mlp", encoders[best], "mlp", splits, cfg)
     run_system(f"{best}+mlp2", encoders[best], "mlp", splits, cfg, two_layer=True)
+
+
+def run_p2_system(name: str, spec: dict, tokenizer, emb, splits: dict[int, dict], cfg: P2Config) -> dict:
+    """Cross-validate one P2 system over all seeds with part2.experiment.cross_validation.
+
+    spec: {"enc_type": "embed-and-pool" | "lstm", "siamese": bool, "bidirectional": bool (optional),
+           "enc_kwargs": dict passed to the tutorial encoder (optional)}.
+    Saves accuracies, F1 and per-fold predictions with validation ids (for error analysis) to cv/<name>.json.
+    Saved after every seed, so a stopped run resumes at the first unfinished seed; reuses a finished result
+    made with the same settings and spec.
+    """
+    path = cfg.results_dir / "cv" / f"{name}.json"
+    settings = json.loads(json.dumps({"config": cfg.to_dict(), "spec": spec}))  # JSON round trip: tuples -> lists
+    scores = {"name": name, **settings, "accuracies": [], "f1": [], "folds": [], "seeds_done": []}
+    if path.exists():
+        saved = json.loads(path.read_text())
+        if {"config": saved["config"], "spec": saved["spec"]} == settings:
+            saved.setdefault("seeds_done", list(cfg.seeds))  # files from before per-seed saving are complete
+            if saved["seeds_done"] == list(cfg.seeds):
+                return saved
+            scores = saved
+
+    enc_kwargs = {"freeze_embeddings": cfg.freeze_embeddings} | spec.get("enc_kwargs", {})
+    if spec["enc_type"] == "lstm":
+        enc_kwargs.setdefault("hidden_size", cfg.lstm_hidden)
+    for seed, data_splits in splits.items():
+        if seed in scores["seeds_done"]:
+            continue
+        set_seed(seed)
+        with encoder_patch(spec["enc_type"], spec["siamese"], tokenizer.sep_id, spec.get("bidirectional", False)):
+            result = part2.experiment.cross_validation(
+                OUTCOMES,
+                data_splits,
+                tokenizer,
+                emb,
+                spec["enc_type"],
+                dict(enc_kwargs),  # train() adds padding_idx in place
+                cfg.regressor_kwargs(),
+                cfg.opt_kwargs(),
+                device=cfg.device,
+                save_to=str(cfg.results_dir / "models" / name / f"seed-{seed}"),
+            )
+        for fold, predictions in result["predictions"].items():
+            scores["accuracies"].append(float(result["accuracies"][fold]))
+            scores["f1"].append(fold_f1(data_splits[fold], predictions))
+            scores["folds"].append(
+                {
+                    "seed": seed,
+                    "fold": fold,
+                    "validation_ids": data_splits[fold]["validation_ids"],
+                    "predictions": [int(p) for p in predictions],
+                }
+            )
+        scores["seeds_done"].append(seed)
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(json.dumps(scores))
+    return scores

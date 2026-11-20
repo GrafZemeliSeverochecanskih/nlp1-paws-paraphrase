@@ -1,6 +1,9 @@
 """Central settings: paths, seeds, number of folds, tokenizer and model hyperparameters, ROPE size."""
 
+import argparse
 from pathlib import Path
+
+import torch
 
 ROOT = Path(__file__).resolve().parents[2]
 
@@ -101,3 +104,96 @@ class Config:
         """Create the output folders. Called by scripts, not on import."""
         self.data_dir.mkdir(parents=True, exist_ok=True)
         self.results_dir.mkdir(parents=True, exist_ok=True)
+
+
+class P2Config(Config):
+    """P2 settings. Inherits P1's data, fold and seed settings unchanged, so P2 folds equal P1's grouped folds
+    and P1 systems can be compared with P2 systems fold by fold.
+    """
+
+    def __init__(
+        self,
+        results_dir: Path = ROOT / "results" / "p2",
+        glove_path: Path = ROOT / "data" / "glove.2024.wikigiga.50d.zip",
+        emb_dim: int = 50,
+        glove_skip_first_line: bool = False,
+        lowercase: bool = True,
+        remove_punct: bool = False,
+        lstm_hidden: int = 128,
+        regressor_hidden: int = 50,
+        freeze_embeddings: bool = True,
+        **kwargs,
+    ) -> None:
+        """Store P2 settings; remaining keyword arguments go to Config (k, seeds, subsample_size, num_epochs, ...).
+
+        Args:
+            glove_path: Zipped GloVe file, read directly by part2.clslib.PretrainedEmbeddings (no unzipping).
+            emb_dim, glove_skip_first_line: Must match the file; values for GloVe 2024 50d from the tutorial.
+            lowercase: Required: the GloVe vocab is all lowercase and BasicTokenizer.ids does not lowercase,
+                so lowercase=False maps every capitalised word to <unk>.
+            remove_punct: False. True lowers token OOV only from 0.97% to 0.75% (it fixes hyphenated compounds;
+                rare names stay OOV either way) but deletes 13% of tokens, incl. the commas that mark the clause
+                boundaries PAWS reorders, which the LSTM can use (scripts/08_embedding_coverage.py).
+            lstm_hidden: LSTM state size.
+            regressor_hidden: Both hidden layers of part2.clslib.SoftmaxRegressor (tutorial default 50).
+            freeze_embeddings: Keep GloVe fixed; set False for the trainable-embeddings experiment.
+        """
+        kwargs.setdefault("device", "cuda" if torch.cuda.is_available() else "cpu")
+        super().__init__(results_dir=results_dir, **kwargs)
+        self.glove_path = glove_path
+        self.emb_dim = emb_dim
+        self.glove_skip_first_line = glove_skip_first_line
+        self.lowercase = lowercase
+        self.remove_punct = remove_punct
+        self.lstm_hidden = lstm_hidden
+        self.regressor_hidden = regressor_hidden
+        self.freeze_embeddings = freeze_embeddings
+
+    def regressor_kwargs(self) -> dict:
+        """Keyword arguments for part2.clslib.SoftmaxRegressor (minus encoder and num_classes, added by part2)."""
+        return {"hidden_size1": self.regressor_hidden, "hidden_size2": self.regressor_hidden, "dropout": self.dropout}
+
+    def opt_kwargs(self) -> dict:
+        """Keyword arguments for part2.experiment.train(opt_kwargs=...); keys must match it exactly."""
+        return {
+            "learning_rate": self.learning_rate,
+            "weight_decay": self.weight_decay,
+            "batch_size": self.batch_size,
+            "num_epochs": self.num_epochs,
+        }
+
+
+# Embedding alternatives for `--glove` (name -> file, dims). The default is GloVe 2024 50d; the 6B files are GloVe 2014
+# Wikipedia+Gigaword (400k words), extracted from glove.6B.zip because part2 reads only single-file zips.
+EMBEDDINGS = {
+    "2024-50d": (ROOT / "data" / "glove.2024.wikigiga.50d.zip", 50),
+    "6B-50d": (ROOT / "data" / "glove6B" / "glove.6B.50d.txt", 50),
+    "6B-100d": (ROOT / "data" / "glove6B" / "glove.6B.100d.txt", 100),
+    "6B-300d": (ROOT / "data" / "glove6B" / "glove.6B.300d.txt", 300),
+}
+
+
+def variant_parser() -> argparse.ArgumentParser:
+    """CLI options shared by the P2 scripts to pick a run other than the default (use as a parent parser)."""
+    parser = argparse.ArgumentParser(add_help=False)
+    parser.add_argument("--k", type=int, help="number of folds (default: P1's)")
+    parser.add_argument("--seeds", type=int, nargs="+", help="one CV run per seed (default: P1's)")
+    parser.add_argument("--subsample", type=int, help="train pairs (default: P1's); for the learning curve")
+    parser.add_argument("--glove", choices=list(EMBEDDINGS), help="embedding file (default: 2024-50d)")
+    return parser
+
+
+def p2_variant(args: argparse.Namespace) -> P2Config:
+    """P2Config with the options of `variant_parser`. Any non-default value gets its own results folder
+    (e.g. results/p2_seeds0-1-2, results/p2_n5000, results/p2_glove6B-100d), so runs never mix in one table.
+    """
+    default = P2Config()
+    overrides = {"k": args.k, "seeds": tuple(args.seeds) if args.seeds else None, "subsample_size": args.subsample}
+    changed = {key: value for key, value in overrides.items() if value is not None and value != getattr(default, key)}
+    tags = [{"k": f"k{args.k}", "seeds": "seeds" + "-".join(map(str, args.seeds or [])), "subsample_size": f"n{args.subsample}"}[key] for key in changed]
+    if getattr(args, "glove", None) and EMBEDDINGS[args.glove][0] != default.glove_path:
+        changed["glove_path"], changed["emb_dim"] = EMBEDDINGS[args.glove]
+        tags.append(f"glove{args.glove}")
+    if not changed:
+        return default
+    return P2Config(results_dir=ROOT / "results" / "_".join(["p2"] + tags), **changed)

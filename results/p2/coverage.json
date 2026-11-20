@@ -1,0 +1,165 @@
+{
+  "config": {
+    "root": "D:\\University\\MSc\\Natural Language Processing 1\\Project\\nlp1-paws",
+    "data_dir": "D:\\University\\MSc\\Natural Language Processing 1\\Project\\nlp1-paws\\data",
+    "results_dir": "D:\\University\\MSc\\Natural Language Processing 1\\Project\\nlp1-paws\\results\\p2",
+    "tokenizer_path": "D:\\University\\MSc\\Natural Language Processing 1\\Project\\nlp1-paws\\results\\p1\\tokenizer.json",
+    "dataset_name": "google-research-datasets/paws",
+    "dataset_config": "labeled_final",
+    "subsample_size": 20000,
+    "seeds": [
+      0
+    ],
+    "k": 5,
+    "vocab_size": 1000,
+    "min_frequency": 2,
+    "max_bigrams": 5000,
+    "loglin_max_iter": 10000,
+    "hidden_dim": 128,
+    "dropout": 0.1,
+    "batch_size": 64,
+    "learning_rate": 0.001,
+    "weight_decay": 0.0001,
+    "num_epochs": 20,
+    "device": "cpu",
+    "rope": 0.01,
+    "glove_path": "D:\\University\\MSc\\Natural Language Processing 1\\Project\\nlp1-paws\\data\\glove.2024.wikigiga.50d.zip",
+    "emb_dim": 50,
+    "glove_skip_first_line": false,
+    "lowercase": true,
+    "remove_punct": false,
+    "lstm_hidden": 128,
+    "regressor_hidden": 50,
+    "freeze_embeddings": true
+  },
+  "sentences": 40223,
+  "tokens": 853767,
+  "types": 31477,
+  "token_oov_rate": 0.009747390095892674,
+  "type_oov_rate": 0.082504685961178,
+  "capitalised_token_oov_rate": 0.02452877763081646,
+  "other_token_oov_rate": 0.004424045651945338,
+  "sentences_with_oov": 0.16401064067821894,
+  "top_oov": [
+    [
+      "\u00bd",
+      30
+    ],
+    [
+      "olivellidae",
+      22
+    ],
+    [
+      "well-known",
+      22
+    ],
+    [
+      "..",
+      19
+    ],
+    [
+      "south-eastern",
+      19
+    ],
+    [
+      "blu-ray",
+      16
+    ],
+    [
+      "north-western",
+      15
+    ],
+    [
+      "long-time",
+      14
+    ],
+    [
+      "long-running",
+      14
+    ],
+    [
+      "eoacmaeidae",
+      12
+    ],
+    [
+      "urechioiu",
+      12
+    ],
+    [
+      "shantih",
+      12
+    ],
+    [
+      "dzhidzhimli",
+      12
+    ],
+    [
+      "short-lived",
+      12
+    ],
+    [
+      "kurgo",
+      12
+    ],
+    [
+      "leudesius",
+      12
+    ],
+    [
+      "upfa-slfp",
+      12
+    ],
+    [
+      "pre-",
+      11
+    ],
+    [
+      "2014-15",
+      11
+    ],
+    [
+      "built-in",
+      11
+    ],
+    [
+      "role-playing",
+      11
+    ],
+    [
+      "zanair",
+      11
+    ],
+    [
+      "sucevi\u0163a",
+      11
+    ],
+    [
+      "full-time",
+      11
+    ],
+    [
+      "two-year",
+      11
+    ],
+    [
+      "saint-\u00e9tienne",
+      11
+    ],
+    [
+      "sperchios",
+      10
+    ],
+    [
+      "thirty-three",
+      10
+    ],
+    [
+      "half-sister",
+      10
+    ],
+    [
+      "pdla",
+      10
+    ]
+  ]
+}

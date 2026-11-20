@@ -11,8 +11,13 @@ from paws.tutorial import part1
 
 
 def load_scores(cfg: Config) -> dict[str, dict]:
-    """All saved systems, keyed by name."""
-    return {path.stem: json.loads(path.read_text()) for path in sorted((cfg.results_dir / "cv").glob("*.json"))}
+    """All saved systems, keyed by name. Skips P2 systems still missing seeds (a stopped run), whose fold count
+    would not match runs=len(cfg.seeds) in the ROPE test."""
+    scores = {path.stem: json.loads(path.read_text()) for path in sorted((cfg.results_dir / "cv").glob("*.json"))}
+    unfinished = [name for name, s in scores.items() if s.get("seeds_done", list(cfg.seeds)) != list(cfg.seeds)]
+    if unfinished:
+        print(f"Skipping unfinished systems (rerun 09 to resume): {', '.join(unfinished)}")
+    return {name: s for name, s in scores.items() if name not in unfinished}
 
 
 def results_table(scores: dict[str, dict]) -> pd.DataFrame:
@@ -53,7 +58,8 @@ def rope_table(scores: dict[str, dict], cfg: Config, pairs: list[tuple[str, str]
         ax.set_xlabel("Mean accuracy difference (B - A)")
         ax.get_lines()[0].set_label("posterior")
         ax.legend()
-        fig.savefig(cfg.results_dir / f"rope_{a}_vs_{b}.png", dpi=200, bbox_inches="tight")
+        file_name = f"rope_{a}_vs_{b}.png".replace(":", "-")  # ":" (p1:..., glove...:...) is invalid on Windows
+        fig.savefig(cfg.results_dir / file_name, dpi=200, bbox_inches="tight")
         plt.close("all")
     return pd.DataFrame(rows)
 
@@ -68,3 +74,10 @@ def box_plot(scores: dict[str, dict], cfg: Config) -> None:
     part1.analysis.plot_box_and_points(part1.analysis.make_data_frame(data))
     plt.gcf().savefig(cfg.results_dir / "accuracy_box.png", dpi=200, bbox_inches="tight")
     plt.close("all")
+
+
+def oof_predictions(saved: dict, seed: int) -> dict[int, int]:
+    """Out-of-fold prediction per pair id for one CV run of a saved P2 system (each pair is validated once per seed)."""
+    return {
+        i: p for fold in saved["folds"] if fold["seed"] == seed for i, p in zip(fold["validation_ids"], fold["predictions"])
+    }

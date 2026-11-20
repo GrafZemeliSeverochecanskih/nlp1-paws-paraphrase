@@ -1,0 +1,165 @@
+{
+  "config": {
+    "root": "D:\\University\\MSc\\Natural Language Processing 1\\Project\\nlp1-paws",
+    "data_dir": "D:\\University\\MSc\\Natural Language Processing 1\\Project\\nlp1-paws\\data",
+    "results_dir": "D:\\University\\MSc\\Natural Language Processing 1\\Project\\nlp1-paws\\results\\p2_glove6B-100d",
+    "tokenizer_path": "D:\\University\\MSc\\Natural Language Processing 1\\Project\\nlp1-paws\\results\\p1\\tokenizer.json",
+    "dataset_name": "google-research-datasets/paws",
+    "dataset_config": "labeled_final",
+    "subsample_size": 20000,
+    "seeds": [
+      0
+    ],
+    "k": 5,
+    "vocab_size": 1000,
+    "min_frequency": 2,
+    "max_bigrams": 5000,
+    "loglin_max_iter": 10000,
+    "hidden_dim": 128,
+    "dropout": 0.1,
+    "batch_size": 64,
+    "learning_rate": 0.001,
+    "weight_decay": 0.0001,
+    "num_epochs": 20,
+    "device": "cuda",
+    "rope": 0.01,
+    "glove_path": "D:\\University\\MSc\\Natural Language Processing 1\\Project\\nlp1-paws\\data\\glove6B\\glove.6B.100d.txt",
+    "emb_dim": 100,
+    "glove_skip_first_line": false,
+    "lowercase": true,
+    "remove_punct": false,
+    "lstm_hidden": 128,
+    "regressor_hidden": 50,
+    "freeze_embeddings": true
+  },
+  "sentences": 40223,
+  "tokens": 853767,
+  "types": 31477,
+  "token_oov_rate": 0.018334041957583275,
+  "type_oov_rate": 0.13663945102773453,
+  "capitalised_token_oov_rate": 0.057342929563259475,
+  "other_token_oov_rate": 0.004285445734149427,
+  "sentences_with_oov": 0.2697213037316958,
+  "top_oov": [
+    [
+      "berasia",
+      58
+    ],
+    [
+      "\u00d7",
+      42
+    ],
+    [
+      "\u00b0",
+      24
+    ],
+    [
+      "\u2192",
+      20
+    ],
+    [
+      "..",
+      19
+    ],
+    [
+      "mouhoun",
+      15
+    ],
+    [
+      "garr\u00e9",
+      15
+    ],
+    [
+      "minerv\u00e9n",
+      14
+    ],
+    [
+      "l\u00e4\u00e4neranna",
+      13
+    ],
+    [
+      "togdheer",
+      12
+    ],
+    [
+      "poovachal",
+      12
+    ],
+    [
+      "aganbegyan",
+      12
+    ],
+    [
+      "eoacmaea",
+      12
+    ],
+    [
+      "eoacmaeidae",
+      12
+    ],
+    [
+      "urechioiu",
+      12
+    ],
+    [
+      "eletr\u00f4nica",
+      12
+    ],
+    [
+      "shantih",
+      12
+    ],
+    [
+      "lopham",
+      12
+    ],
+    [
+      "dzhidzhimli",
+      12
+    ],
+    [
+      "kurgo",
+      12
+    ],
+    [
+      "rockox",
+      12
+    ],
+    [
+      "leudesius",
+      12
+    ],
+    [
+      "\u017eujovi\u0107",
+      12
+    ],
+    [
+      "haftar",
+      12
+    ],
+    [
+      "ogoki",
+      12
+    ],
+    [
+      "takesaki",
+      12
+    ],
+    [
+      "pre-",
+      11
+    ],
+    [
+      "tirebolu",
+      11
+    ],
+    [
+      "spr\u00e1vn\u00ed",
+      11
+    ],
+    [
+      "obvod",
+      11
+    ]
+  ]
+}
